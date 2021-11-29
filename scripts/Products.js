@@ -1,16 +1,28 @@
-import { getProducts } from "./database.js"
+import { getProducts } from "./database.js";
 
-const products = getProducts()
-
-export const Products = () => {
-    let html = "<ul>"
+document.addEventListener("click", (clickItem) => {
+  const itemClicked = clickItem.target;
+  if (itemClicked.id.startsWith("product")) {
+    const [, productId] = itemClicked.id.split("--");
 
     for (const product of products) {
-        html += `<li id="product--${product.id}">${product.name}</li>`
+      if (product.id === parseInt(productId)) {
+        window.alert(`${product.name} is $${product.price}`);
+      }
     }
+  }
+});
 
-    html += "</ul>"
+const products = getProducts();
 
-    return html
-}
+export const Products = () => {
+  let html = "<ul>";
 
+  for (const product of products) {
+    html += `<li id="product--${product.id}">${product.name}</li>`;
+  }
+
+  html += "</ul>";
+
+  return html;
+};
