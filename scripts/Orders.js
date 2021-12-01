@@ -1,24 +1,26 @@
 import { getProducts, getEmployees, getOrders } from "./database.js";
 
 document.addEventListener("click", (clickedItem) => {
-  const itemClicked = clickedItem.target
-  if (itemClicked.id.startsWith("employee")){
-      const [,employeeId] = itemClicked.id.split("--")
+  const itemClicked = clickedItem.target;
+  if (itemClicked.id.startsWith("employee")) {
+    const [, employeeId] = itemClicked.id.split("--");
 
-      for (const employee of employees){
-          if (employee.id === parseInt(employeeId)){
-              const employeeOrders = orders.filter((order)=>{
-                if (order.employeeId === employee.id){
-                  return true
-                }
-              }
-            )
-            window.alert(`${employee.name} sold ${employeeOrders.length} products.`) 
+    for (const employee of employees) {
+      if (employee.id === parseInt(employeeId)) {
+        const employeeOrders = orders.filter((order) => {
+          if (order.employeeId === employee.id) {
+            return true;
           }
+        });
+        window.alert(
+          `${employee.name} sold ${employeeOrders.length} products.`
+        );
+        break;
       }
-
+      
+    }
   }
-})
+});
 
 // Get copy of state for use in this module
 const products = getProducts();
@@ -50,8 +52,8 @@ const findEmployee = (order, allEmployees) => {
 
   if (orderEmployee === null) {
     console.log("employee id not found");
-  } 
-  
+  }
+
   return orderEmployee;
 };
 
@@ -61,11 +63,9 @@ export const Orders = () => {
   for (const order of orders) {
     const employee = findEmployee(order, employees);
     const product = findProduct(order, products);
-    const employeeName = (employee === null) ? 'Not Found' : employee.name;
+    const employeeName = employee === null ? "Unregistered employee" : employee.name;
 
-    html += `<li>${(product === null) ? 'Not Found' : product.name} was sold by ${employeeName} on ${new Date(
-      order.timestamp
-    ).toLocaleDateString()}</li>`;
+    html += `<li>${product === null ? "Unregistered product" : product.name} was sold by ${employeeName} on ${new Date(order.timestamp).toLocaleDateString()}</li>`;
   }
 
   html += "</ul>";
